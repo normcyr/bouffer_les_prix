@@ -9,10 +9,10 @@ from bs4 import BeautifulSoup
 import requests
 import json
 from datetime import datetime
+import csv
 
 def faire_soupe(url_recherche):
 
-    '''
     requete = requests.get(url_recherche)
 
     if requete.status_code == requests.codes.ok:
@@ -21,11 +21,12 @@ def faire_soupe(url_recherche):
     else:
         # pleure parce que la page n'est pas disponible
         requete.raise_for_status()
-    '''
 
+    '''
     # pour effectuer les tests hors-ligne
-    with open('exemple2.html', 'r') as fichier_html:
+    with open('exemple.html', 'r') as fichier_html:
         soupe = BeautifulSoup(fichier_html, 'html.parser')
+    '''
 
     return(soupe)
 
@@ -41,7 +42,7 @@ def trouver_resultats(soupe):
 
     return(soupe_resultats)
 
-def creer_liste(soupe_resultats):
+def creer_liste(soupe_resultats, fichier_sortie_csv):
 
     # initialiser liste de résultats
     liste_speciaux = []
@@ -70,12 +71,18 @@ def creer_liste(soupe_resultats):
         # ajouter le dictionnaire à la liste de résultats
         liste_speciaux.append(details_produit)
 
+        # création fichier CSV
+        rangee = [nom_produit, format_produit, origine_produit, prix_produit, periode_special_produit, magasin_produit]
+        with open(fichier_sortie_csv, 'a') as csv_sortie:
+            writer = csv.writer(csv_sortie, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+            writer.writerow(rangee)
+
     return(liste_speciaux)
 
 def extraire_json(liste_speciaux, fichier_sortie):
 
     with open(fichier_sortie, 'w') as outfile:
-        json.dump(liste_speciaux, outfile, indent = 4)
+        json.dump(liste_speciaux, outfile, indent = 4, sort_keys = True)
 
 def main():
 
@@ -84,10 +91,17 @@ def main():
     url_recherche = recherche_url_base + mots_recherche
     ajd = datetime.now().strftime("%Y%m%d")
     fichier_sortie = 'liste_speciaux_' + ajd + '.json'
+    fichier_sortie_csv = 'liste_speciaux_' + ajd + '.csv'
 
     soupe = faire_soupe(url_recherche)
     soupe_resultats = trouver_resultats(soupe)
-    liste_speciaux = creer_liste(soupe_resultats)
+
+    #Écrire entêtes du fichier csv
+    with open(fichier_sortie_csv, 'w') as csv_sortie:
+        writer = csv.writer(csv_sortie, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+        writer.writerow(['Nom', 'Format', 'Origine', 'Prix', 'Période du spécial', 'Magasin'])
+
+    liste_speciaux = creer_liste(soupe_resultats, fichier_sortie_csv)
 
     extraire_json(liste_speciaux, fichier_sortie)
 
