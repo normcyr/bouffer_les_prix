@@ -9,7 +9,7 @@ import csv
 
 def faire_tableau_html(fichier_json, fichier_html):
 
-    with open(fichier_json, 'r') as f:
+    with open(fichier_json, 'r', encoding='utf-8') as f:
         texte_json = json.load(f)
         tableau_html = json2html.convert(json = texte_json)
 
@@ -21,14 +21,14 @@ def faire_tableau_html(fichier_json, fichier_html):
 def faire_tableau_texte(fichier_json, fichier_texte, ajd):
 
     # lire les données JSON
-    with open(fichier_json, 'r') as f:
+    with open(fichier_json, 'r', encoding='utf-8') as f:
         texte_json = json.load(f)
 
     # créer le tableau texte avec le module tabulate
     tableau_texte = tabulate(texte_json, headers = 'keys')
 
     # enregistrer en fichier TXT
-    with open(fichier_texte, 'w') as f:
+    with open(fichier_texte, 'w', encoding='utf-8') as f:
         f.write('Spéciaux sur le beurre d\'arachide.\n')
         f.write('Généré le {}.\n'.format(ajd))
         f.write('\n')

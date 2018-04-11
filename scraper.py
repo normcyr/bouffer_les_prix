@@ -24,7 +24,7 @@ def faire_soupe(url_recherche):
 
     '''
     # pour effectuer les tests hors-ligne
-    with open('exemple.html', 'r') as fichier_html:
+    with open('exemple.html', 'r', encoding='utf-8') as fichier_html:
         soupe = BeautifulSoup(fichier_html, 'html.parser')
     '''
 
@@ -73,7 +73,7 @@ def creer_liste(soupe_resultats, fichier_sortie_csv):
 
         # création fichier CSV
         rangee = [nom_produit, format_produit, origine_produit, prix_produit, periode_special_produit, magasin_produit]
-        with open(fichier_sortie_csv, 'a') as csv_sortie:
+        with open(fichier_sortie_csv, 'a', encoding='utf-8') as csv_sortie:
             writer = csv.writer(csv_sortie, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
             writer.writerow(rangee)
 
@@ -81,7 +81,7 @@ def creer_liste(soupe_resultats, fichier_sortie_csv):
 
 def extraire_json(liste_speciaux, fichier_sortie):
 
-    with open(fichier_sortie, 'w') as outfile:
+    with open(fichier_sortie, 'w', encoding='utf-8') as outfile:
         json.dump(liste_speciaux, outfile, indent = 4, sort_keys = True)
 
 def main():
@@ -97,7 +97,7 @@ def main():
     soupe_resultats = trouver_resultats(soupe)
 
     #Écrire entêtes du fichier csv
-    with open(fichier_sortie_csv, 'w') as csv_sortie:
+    with open(fichier_sortie_csv, 'w', encoding='utf-8') as csv_sortie:
         writer = csv.writer(csv_sortie, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
         writer.writerow(['Nom', 'Format', 'Origine', 'Prix', 'Période du spécial', 'Magasin'])
 
