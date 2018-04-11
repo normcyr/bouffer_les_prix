@@ -18,14 +18,21 @@ def faire_tableau_html(fichier_json, fichier_html):
 
     return(tableau_html)
 
-def faire_tableau_texte(fichier_json, fichier_texte):
+def faire_tableau_texte(fichier_json, fichier_texte, ajd):
 
+    # lire les données JSON
     with open(fichier_json, 'r') as f:
         texte_json = json.load(f)
 
+    # créer le tableau texte avec le module tabulate
     tableau_texte = tabulate(texte_json, headers = 'keys')
 
-    print(tableau_texte)
+    # enregistrer en fichier TXT
+    with open(fichier_texte, 'w') as f:
+        f.write('Spéciaux sur le beurre d\'arachide.\n')
+        f.write('Généré le {}.\n'.format(ajd))
+        f.write('\n')
+        f.write(tableau_texte+'\n')
 
     return(tableau_texte)
 
@@ -38,8 +45,7 @@ def main():
     fichier_texte = 'liste_speciaux_' + ajd + '.txt'
 
     #tableau_html = faire_tableau_html(fichier_json, fichier_html)
-
-    tableau_texte = faire_tableau_texte(fichier_json, fichier_texte)
+    tableau_texte = faire_tableau_texte(fichier_json, fichier_texte, ajd)
 
 if __name__ == '__main__':
     main()
