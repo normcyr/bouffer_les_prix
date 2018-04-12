@@ -30,17 +30,27 @@ def faire_soupe(url_recherche):
 
     return(soupe)
 
-def trouver_resultats(soupe):
+def trouver_si_resultats(soupe):
 
     # trouver section nombre de résultats et extraire le chiffre
     section_nb_produits = soupe.find('table', {'id': 'table89'})
-    nb_produits = int(section_nb_produits.find('b').text)
-    #print('nb produits: {}'.format(nb_produits))
+
+    # vérifier s'il y a des spéciaux
+    try:
+        nb_produits = int(section_nb_produits.find('b').text)
+        speciaux = True
+    except AttributeError:
+        speciaux = False
+
+    return(speciaux)
+
+def trouver_resultats(soupe):
 
     # trouver section liste des résultats
     soupe_resultats = soupe.find_all('tr', {'onmouseover': 'this.bgColor = \'#FFFFD9\''})
 
     return(soupe_resultats)
+
 
 def creer_liste(soupe_resultats, fichier_sortie_csv):
 
@@ -86,6 +96,7 @@ def extraire_json(liste_speciaux, fichier_sortie):
 
 def main():
 
+    # variables
     recherche_url_base = 'http://www.supermarches.ca/pages/default.asp?t=&tr=&vd=&ig=&q=rech&cid=&query='
     mots_recherche = 'Beurre+d\'arachide+Croquant+Kraft'
     url_recherche = recherche_url_base + mots_recherche
@@ -94,16 +105,22 @@ def main():
     fichier_sortie_csv = 'liste_speciaux_' + ajd + '.csv'
 
     soupe = faire_soupe(url_recherche)
-    soupe_resultats = trouver_resultats(soupe)
+    speciaux = trouver_si_resultats(soupe)
 
-    #Écrire entêtes du fichier csv
-    with open(fichier_sortie_csv, 'w', encoding='utf-8') as csv_sortie:
-        writer = csv.writer(csv_sortie, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-        writer.writerow(['Nom', 'Format', 'Origine', 'Prix', 'Période du spécial', 'Magasin'])
+    if speciaux == True:
+        soupe_resultats = trouver_resultats(soupe)
 
-    liste_speciaux = creer_liste(soupe_resultats, fichier_sortie_csv)
+        # écrire entêtes du fichier csv
+        with open(fichier_sortie_csv, 'w', encoding='utf-8') as csv_sortie:
+            writer = csv.writer(csv_sortie, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+            writer.writerow(['Nom', 'Format', 'Origine', 'Prix', 'Période du spécial', 'Magasin'])
 
-    extraire_json(liste_speciaux, fichier_sortie)
+        # faire liste des spéciaux et sortir en csv et json
+        liste_speciaux = creer_liste(soupe_resultats, fichier_sortie_csv)
+        extraire_json(liste_speciaux, fichier_sortie)
+
+    else:
+        print('Pas de spéciaux pour {}'.format(mots_recherche).replace('+', ' '))
 
 if __name__ == '__main__':
     main()
