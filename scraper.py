@@ -56,17 +56,17 @@ def creer_liste(soupe_resultats, fichier_sortie_csv):
         magasin_produit = resultat.find('td', {'width': '72'}).text.strip()
 
         # enlever la mention de l'unité de mesure et mettre format sur même unité (ici: gramme)
-        format_brut_produit = resultat.find('td', {'width': '86'}).text.strip()
-        if format_brut_produit[-2:] == 'kg':
-            format_produit = int(format_brut_produit[:-2]) * 1000
+        format_produit = resultat.find('td', {'width': '86'}).text.strip()
+        if format_produit[-2:] == 'kg':
+            format_produit_grammes = int(format_produit[:-2]) * 1000
         else:
-            format_produit = int(format_brut_produit[:-2])
+            format_produit_grammes = int(format_produit[:-2])
 
         # calculer coût par 100 g
-        cout_100g_produit = prix_produit / (format_produit / 100)
+        cout_100g_produit = prix_produit / (format_produit_grammes / 100)
 
         # créer dictionnaire des résultats
-        details_produit = {'nom': nom_produit, 'format': format_produit, 'origine': origine_produit, 'prix': prix_produit, 'prix par 100 g': cout_100g_produit, 'période spécial': periode_special_produit, 'magasin': magasin_produit}
+        details_produit = {'nom': nom_produit, 'format': format_produit, 'origine': origine_produit, 'prix': str('{:.2f}'.format(prix_produit)) + ' $', 'prix / 100 g': str('{:.2f}'.format(cout_100g_produit)) + ' $', 'période spécial': periode_special_produit, 'magasin': magasin_produit}
 
         # ajouter le dictionnaire à la liste de résultats
         liste_speciaux.append(details_produit)
