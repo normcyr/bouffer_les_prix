@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import requests
 import json
 from datetime import datetime
-import csv
+import yaml
 
 def faire_soupe(url_recherche):
 
@@ -52,7 +52,7 @@ def trouver_resultats(soupe):
     return(soupe_resultats)
 
 
-def creer_liste(soupe_resultats, fichier_sortie_csv):
+def creer_liste(soupe_resultats):
 
     # initialiser liste de résultats
     liste_speciaux = []
@@ -76,16 +76,10 @@ def creer_liste(soupe_resultats, fichier_sortie_csv):
         cout_100g_produit = prix_produit / (format_produit_grammes / 100)
 
         # créer dictionnaire des résultats
-        details_produit = {'nom': nom_produit, 'format': format_produit, 'origine': origine_produit, 'prix': str('{:.2f}'.format(prix_produit)) + ' $', 'prix / 100 g': str('{:.2f}'.format(cout_100g_produit)) + ' $', 'période spécial': periode_special_produit, 'magasin': magasin_produit}
+        details_produit = {'nom': nom_produit[:40], 'format': format_produit, 'origine': origine_produit, 'prix': str('{:.2f}'.format(prix_produit)) + ' $', 'prix / 100 g': str('{:.2f}'.format(cout_100g_produit)) + ' $', 'période spécial': periode_special_produit, 'magasin': magasin_produit}
 
         # ajouter le dictionnaire à la liste de résultats
         liste_speciaux.append(details_produit)
-
-        # création fichier CSV
-        rangee = [nom_produit, format_produit, origine_produit, prix_produit, periode_special_produit, magasin_produit]
-        with open(fichier_sortie_csv, 'a', encoding='utf-8') as csv_sortie:
-            writer = csv.writer(csv_sortie, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-            writer.writerow(rangee)
 
     return(liste_speciaux)
 
@@ -98,29 +92,30 @@ def main():
 
     # variables
     recherche_url_base = 'http://www.supermarches.ca/pages/default.asp?t=&tr=&vd=&ig=&q=rech&cid=&query='
-    mots_recherche = 'Beurre+d\'arachide+Croquant+Kraft'
-    url_recherche = recherche_url_base + mots_recherche
     ajd = datetime.now().strftime("%Y%m%d")
     fichier_sortie = 'liste_speciaux_' + ajd + '.json'
-    fichier_sortie_csv = 'liste_speciaux_' + ajd + '.csv'
+    fichier_mots = 'mots_recherche.yml'
 
-    soupe = faire_soupe(url_recherche)
-    speciaux = trouver_si_resultats(soupe)
+    # extraire les mots clé à chercher
+    with open(fichier_mots, 'r') as f_yml:
+        mots_recherche = yaml.load(f_yml)
 
-    if speciaux == True:
-        soupe_resultats = trouver_resultats(soupe)
+    #mots_recherche = 'Beurre+d\'arachide'
+    for mot in mots_recherche:
+        mot = mot.replace(' ', '+')
+        url_recherche = recherche_url_base + mot
+        soupe = faire_soupe(url_recherche)
+        speciaux = trouver_si_resultats(soupe)
 
-        # écrire entêtes du fichier csv
-        with open(fichier_sortie_csv, 'w', encoding='utf-8') as csv_sortie:
-            writer = csv.writer(csv_sortie, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-            writer.writerow(['Nom', 'Format', 'Origine', 'Prix', 'Période du spécial', 'Magasin'])
+        if speciaux == True:
+            soupe_resultats = trouver_resultats(soupe)
 
-        # faire liste des spéciaux et sortir en csv et json
-        liste_speciaux = creer_liste(soupe_resultats, fichier_sortie_csv)
-        extraire_json(liste_speciaux, fichier_sortie)
+            # faire liste des spéciaux et sortir en json
+            liste_speciaux = creer_liste(soupe_resultats)
+            extraire_json(liste_speciaux, fichier_sortie)
 
-    else:
-        print('Pas de spéciaux pour {}'.format(mots_recherche).replace('+', ' '))
+        else:
+            print('Pas de spéciaux pour {}'.format(mot).replace('+', ' '))
 
 if __name__ == '__main__':
     main()
