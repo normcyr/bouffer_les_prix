@@ -5,7 +5,6 @@ import json
 from datetime import datetime
 from json2html import *
 from tabulate import tabulate
-import csv
 
 def faire_tableau_html(fichier_json, fichier_html):
 
