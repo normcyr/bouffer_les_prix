@@ -46,5 +46,7 @@ def main():
 
     #tableau_html = faire_tableau_html(texte_json, fichier_html)
 
+    return(tableau_texte)
+
 if __name__ == '__main__':
     main()

@@ -2,3 +2,5 @@
 *.html
 *.txt
 *.csv
+test.py
+__pycache*
