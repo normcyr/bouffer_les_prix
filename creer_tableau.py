@@ -32,6 +32,7 @@ def main():
 
     ajd = datetime.now().strftime("%Y%m%d")
 
+    # je dois changer ceci pour une variable
     produit = 'Beurre'
 
     fichier_json = 'liste_speciaux_' + produit + ajd + '.json'
