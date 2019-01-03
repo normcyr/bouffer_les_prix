@@ -5,6 +5,8 @@ import json
 from datetime import datetime
 from json2html import *
 from tabulate import tabulate
+from pathlib import Path
+
 
 def faire_tableau_html(texte_json, fichier_html):
 
@@ -37,9 +39,10 @@ def main():
     # je dois changer ceci pour une variable
     produit = 'Beurre'
 
-    fichier_json = 'liste_speciaux_' + produit + ajd + '.json'
-    fichier_html = 'liste_speciaux_' + ajd + '.html'
-    fichier_texte = 'liste_speciaux_' + ajd + '.txt'
+    basepath = Path(__file__).parent.resolve()
+    fichier_json = str(Path(basepath / 'liste_speciaux_')) + produit + ajd + '.json'
+    fichier_html = str(Path(basepath / 'liste_speciaux_')) + ajd + '.html'
+    fichier_texte = str(Path(basepath / 'announcement')) + '.txt'
 
     # lire les données JSON
     with open(fichier_json, 'r') as f:

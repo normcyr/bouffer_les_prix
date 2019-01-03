@@ -10,6 +10,8 @@ import requests
 import json
 from datetime import datetime
 import yaml
+from pathlib import Path
+
 
 def faire_soupe(url_recherche):
 
@@ -84,7 +86,8 @@ def main():
     recherche_url_base = 'http://www.supermarches.ca/pages/default.asp?t=&tr=&vd=&ig=&q=rech&cid=&query='
     ajd = datetime.now().strftime("%Y%m%d")
 
-    fichier_mots = 'mots_recherche.yml'
+    basepath = Path(__file__).parent.resolve()
+    fichier_mots = str(Path(basepath / 'mots_recherche.yml'))
 
     # extraire les mots clé à chercher
     with open(fichier_mots, 'r') as f_yml:
@@ -101,7 +104,7 @@ def main():
             soupe_resultats = trouver_resultats(soupe)
 
             # faire liste des spéciaux et sortir en json
-            fichier_sortie = 'liste_speciaux_' + mot[:6] + ajd + '.json'
+            fichier_sortie = str(Path(basepath / 'liste_speciaux_')) + mot[:6] + ajd + '.json'
             liste_speciaux = creer_liste(soupe_resultats, mot)
             sortie_json(liste_speciaux, fichier_sortie)
 
