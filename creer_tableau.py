@@ -21,10 +21,12 @@ def faire_tableau_texte(texte_json, fichier_texte, ajd):
 
     # enregistrer en fichier TXT
     with open(fichier_texte, 'w') as f:
+        f.write('<html>\n<body>\n<pre style="font: monospace">\n')
         f.write('Spéciaux sur le beurre d\'arachide.\n')
         f.write('Généré le {}.\n'.format(ajd))
         f.write('\n')
         f.write(tableau_texte+'\n')
+        f.write('</pre>\n</body>\n</html>\n')
 
     return(tableau_texte)
 
