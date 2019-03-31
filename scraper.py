@@ -91,7 +91,7 @@ def main():
 
     # extraire les mots clé à chercher
     with open(fichier_mots, 'r') as f_yml:
-        mots_recherche = yaml.load(f_yml)
+        mots_recherche = yaml.safe_load(f_yml)
 
     #mots_recherche = 'Beurre+d\'arachide'
     for mot in mots_recherche:
