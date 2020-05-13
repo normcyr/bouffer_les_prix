@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h2>
+    Spéciaux de la semaine
+    <img src="images/cuillere_petit.png" alt="Cuillère de beurre de peanut", height="35px">
+  </h2>
+  <p>
+    Généré le {{ date_genere }}
+  </p>
+  <hr>
+  <div class="container">
+    <table id="main_info" class="table table-hover table-sm">
+      <thead>
+        <tr>
+          <th scope="row" class="table-primary">Format</th>
+          <th scope="row" class="table-primary">Magasin</th>
+          <th scope="row" class="table-primary">Nom</th>
+          <th scope="row" class="table-primary">Origine</th>
+          <th scope="row" class="table-primary">Prix</th>
+          <th scope="row" class="table-primary">Période du spécial</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for special in info_speciaux %}
+        <tr>
+          <td>{{ special["format"] }}</td>
+          <td>{{ special["magasin"] }}</td>
+          <td>{{ special["nom"] }}</td>
+          <td>{{ special["origine"] }}</td>
+          <td>{{ special["prix"] }}</td>
+          <td>{{ special["période spécial"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <hr class="end_table">
+  </div>
+
+
+{% endblock %}

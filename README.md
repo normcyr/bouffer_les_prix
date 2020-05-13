@@ -1,11 +1,12 @@
-Script écrit en Python3 pour extraire les données de spéciaux sur le beurre de peanut à l'épicerie. Retourne un tableau au format texte.
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+
+Script écrit en Python3 pour extraire les données de spéciaux sur le beurre de peanut à l'épicerie. Retourne un tableau au format texte et un autre au format html.
 
 ## Modules Python requis
 
-- beautifulsoup4==4.6.3
-- bs4==0.0.1
-- json2html==1.2.1
-- PyYAML==3.13
-- requests==2.20.0
-- tabulate==0.8.2
-- urllib3==1.24
+- bs4
+- jinja2
+- PyYAML
+- requests
+- tabulate

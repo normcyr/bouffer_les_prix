@@ -1,5 +1,5 @@
 bs4
 PyYAML
+jinja2
 requests
-json2html
 tabulate

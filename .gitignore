@@ -1,7 +1,5 @@
-*.json
-*.html
-*.csv
 test.py
 __pycache*
 venv/
 liste_speciaux*
+announcement.txt
