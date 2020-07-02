@@ -14,6 +14,7 @@ def faire_tableau_html(texte_json, fichier_html, ajd):
     env = Environment(loader=file_loader)
     template = env.get_template("tableau.html")
 
+    #fichier_html = "announcement.txt"
     with open(fichier_html, "w") as f:
         f.write(
             template.render(
@@ -22,8 +23,9 @@ def faire_tableau_html(texte_json, fichier_html, ajd):
         )
 
 
-def faire_tableau_texte(texte_json, fichier_texte, ajd):
+def faire_tableau_texte(texte_json, fichier_texte, ajd, fichier_html):
 
+    '''
     # créer le tableau texte avec le module tabulate
     tableau_texte = tabulate(texte_json, headers="keys")
 
@@ -37,6 +39,12 @@ def faire_tableau_texte(texte_json, fichier_texte, ajd):
         f.write("</pre>\n</body>\n</html>\n")
 
     return tableau_texte
+    '''
+
+    with open(fichier_texte, "w") as f_texte:
+        with open(fichier_html, "r") as f_html:
+            for line in f_html:
+                f_texte.write(line)
 
 
 def main():
@@ -45,7 +53,7 @@ def main():
 
     # je dois changer ceci pour une variable
     produit = "Beurre"
-    # produit = "Yogour"
+    #produit = "Yogour"
 
     basepath = Path(__file__).parent.resolve()
     fichier_json = str(Path(basepath / "liste_speciaux_")) + produit + ajd + ".json"
@@ -55,8 +63,9 @@ def main():
     # lire les données JSON
     with open(fichier_json, "r") as f:
         texte_json = json.load(f)
-        tableau_texte = faire_tableau_texte(texte_json, fichier_texte, ajd)
+        # tableau_texte = faire_tableau_texte(texte_json, fichier_texte, ajd, fichier_html)
         faire_tableau_html(texte_json, fichier_html, ajd)
+        tableau_texte = faire_tableau_texte(texte_json, fichier_texte, ajd, fichier_html)
 
     return tableau_texte
 
