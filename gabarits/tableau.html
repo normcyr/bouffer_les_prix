@@ -2,10 +2,10 @@
 
 {% block content %}
 
-  <h2>
+  <h3>
     Spéciaux de la semaine
-    <img src="images/cuillere_petit.png" alt="Cuillère de beurre de peanut", height="35px">
-  </h2>
+    <img src="images/cuillere_petit.png" alt="Cuillère de beurre de peanut", height="25px">
+  </h3>
   <p>
     Généré le {{ date_genere }}
   </p>
@@ -17,9 +17,8 @@
           <th scope="row" class="table-primary">Format</th>
           <th scope="row" class="table-primary">Magasin</th>
           <th scope="row" class="table-primary">Nom</th>
-          <th scope="row" class="table-primary">Origine</th>
           <th scope="row" class="table-primary">Prix</th>
-          <th scope="row" class="table-primary">Période du spécial</th>
+          <th scope="row" class="table-primary">Fin du spécial</th>
         </tr>
       </thead>
       <tbody>
@@ -28,9 +27,8 @@
           <td>{{ special["format"] }}</td>
           <td>{{ special["magasin"] }}</td>
           <td>{{ special["nom"] }}</td>
-          <td>{{ special["origine"] }}</td>
-          <td>{{ special["prix"] }}</td>
-          <td>{{ special["période spécial"] }}</td>
+          <td class="oneline">{{ special["prix"] }}</td>
+          <td>{{ special["date fin spécial"] }}</td>
         </tr>
         {% endfor %}
       </tbody>

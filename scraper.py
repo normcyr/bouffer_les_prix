@@ -7,10 +7,13 @@ Aller chercher les prix via http://www.supermarches.ca/epicerie.asp
 
 import json
 import yaml
+import locale
 import requests
 from pathlib import Path
 from bs4 import BeautifulSoup
 from datetime import datetime
+
+locale.setlocale(locale.LC_ALL, "fr_CA.utf8")
 
 
 def faire_soupe(url_recherche):
@@ -71,17 +74,24 @@ def creer_liste(soupe_resultats, mot):
         prix_produit = (
             resultat.find("td", {"width": "78"}).text.strip().replace(" / ch.", "")
         )
-        periode_special_produit = resultat.find("td", {"width": "74"}).text.strip()
+        periode_special_produit = resultat.find("td", {"width": "74"}).contents
         magasin_produit = resultat.find("td", {"width": "72"}).text.strip()
         format_produit = resultat.find("td", {"width": "86"}).text.strip()
 
+        date_debut = datetime.strptime(
+            periode_special_produit[0].replace("\xa0", " "), "%d %B %y"
+        )
+        date_fin = datetime.strptime(
+            periode_special_produit[2].replace("\xa0", " "), "%d %B %y"
+        ).strftime("%d %B %Y")
+
         # créer dictionnaire des résultats
         details_produit = {
-            "nom": nom_produit[:40],
+            "nom": nom_produit[:40] + " " + origine_produit,
             "format": format_produit,
             "origine": origine_produit,
             "prix": str("{}".format(prix_produit)) + " $",
-            "période spécial": periode_special_produit,
+            "date fin spécial": date_fin,
             "magasin": magasin_produit,
         }
 
@@ -100,9 +110,7 @@ def sortie_json(liste_speciaux, fichier_sortie):
 def main():
 
     # variables
-    recherche_url_base = (
-        "http://www.supermarches.ca/pages/default.asp?t=&tr=&vd=&ig=&q=rech&cid=&query="
-    )
+    recherche_url_base = "https://www.supermarches.ca/pages/default.asp?q=rech&query="
     ajd = datetime.now().strftime("%Y-%m-%d")
 
     basepath = Path(__file__).parent.resolve()
