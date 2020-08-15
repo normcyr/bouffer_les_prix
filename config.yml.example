@@ -1,0 +1,12 @@
+server:
+    address: smtp.example.com
+    port: 587
+    authentification: True
+login:
+    username: bobleponge@example.com
+    password: 1234567890123456
+addresses:
+    from_address: bobleponge@example.com
+    to_address: bobleponge@example.com
+msg_info:
+    subject: Test message

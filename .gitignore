@@ -3,3 +3,4 @@ __pycache*
 venv/
 liste_speciaux*
 announcement.txt
+config.yml
