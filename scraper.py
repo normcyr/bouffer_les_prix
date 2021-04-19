@@ -79,11 +79,11 @@ def creer_liste(soupe_resultats, mot):
         format_produit = resultat.find("td", {"width": "86"}).text.strip()
 
         date_debut = datetime.strptime(
-            periode_special_produit[0].replace("\xa0", " "), "%d %B %y"
+            periode_special_produit[0].replace("\xa0", " "), "%d %b %y"
         )
         date_fin = datetime.strptime(
-            periode_special_produit[2].replace("\xa0", " "), "%d %B %y"
-        ).strftime("%d %B %Y")
+            periode_special_produit[2].replace("\xa0", " "), "%d %b %y"
+        ).strftime("%d %b %Y")
 
         # créer dictionnaire des résultats
         details_produit = {
